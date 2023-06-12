@@ -1,0 +1,3 @@
+./models/models_rain100H/KPN_rainy_image_iter7_bs4.pth: 0.15301955253213456
+./models/models_rain100L/KPN_rainy_image_iter10_bs4.pth: 0.1382053995668568
+./models/models_rain100L_aug/KPN_rainy_image_iter11_bs1.pth: 0.024701617814358024
