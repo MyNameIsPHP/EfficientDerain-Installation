@@ -7,6 +7,8 @@ from skimage.metrics import structural_similarity
 
 import utils
 import dataset
+import time 
+
 
 def str2bool(v):
     #print(v)
@@ -82,7 +84,8 @@ if __name__ == "__main__":
     utils.check_path(sample_folder)
 
     psnr_sum, psnr_ave, ssim_sum, ssim_ave, eval_cnt = 0, 0, 0, 0, 0
-    
+    time_test = 0
+    count = 0
     # forward
     for i, (true_input, true_target, height_origin, width_origin) in enumerate(test_loader):
 
@@ -95,10 +98,16 @@ if __name__ == "__main__":
             true_target = true_target.cuda()            
 
         # Forward propagation
+        start_time = time.time()
+
         with torch.no_grad():
             #print(true_input.size()) 
             fake_target = generator(true_input, true_input)
-        
+
+        end_time = time.time()
+        dur_time = end_time - start_time
+        time_test += dur_time
+        count += 1
         #print(fake_target.shape, true_input.shape)
 
         # Save
@@ -117,6 +126,7 @@ if __name__ == "__main__":
         ssim_sum = ssim_sum + structural_similarity(img_gt_recover, img_pred_recover, multichannel = True, data_range = 255) 
         eval_cnt = eval_cnt + 1
         
+    print('Avg. time:', time_test/count)
     psnr_ave = psnr_sum / eval_cnt
     ssim_ave = ssim_sum / eval_cnt
     psnr_file = "./data/psnr_data.txt"
